@@ -16,25 +16,81 @@ public class Maze {
 		myWidth = width;
 		myDepth = depth;
 		myMaze = new String[myWidth * 2 + 1][myDepth * 2 + 1];
-		
-		
+		createMaze();
+	
 	}
 	
 	
+	
+	private void createMaze(){
+		System.out.println(myMaze.length);
+		/*for(int i = 0; i < myMaze.length; i++) {
+			for(int j = 0; j < )
+		}*/
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*private void generateMaze(int row, int col) {
-		int[][] locations = getValidLocs(row, col);
-		if (locations.length < 1) {
-			myMaze[row][col] = " ";
-			return;
-		}
+	int[][] locations = getValidLocs(row, col);
+	if (locations.length < 1) {
+		myMaze[row][col] = " ";
+		return;
+	}
+	
+	for (int i = 0; i < locations.length; i++) {
+		myMaze[locations[i][0]][locations[i][1]] = "V";
+		generateMaze(locations[i][0], locations[i][1]);
 		
-		for (int i = 0; i < locations.length; i++) {
-			myMaze[locations[i][0]][locations[i][1]] = "V";
-			generateMaze(locations[i][0], locations[i][1]);
-			
-		}
-		
-	}*/
+	}
+	
+}*/
+	
+	
+	
+	
+	
+	
+	
 	
 	private void generateMaze(int row, int col) {
 		
