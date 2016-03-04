@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Stack;
 /**
  * 
  * @author Nicholas Hays & Ethan Rowell
@@ -11,7 +14,8 @@ public class Maze {
 	private int myDepth;
 	private int[] sourceCoords; // represent the starting loc
 	private int[] destinationCoords; //represent the ending loc
-	
+	private Stack<int[]> shortestPath;
+	private boolean reachedDestination;
 	/**
 	 * Creates a 2d maze of size n by m. With the debug flag set to true it 
 	 * will show the steps of maze creation. 
@@ -22,25 +26,42 @@ public class Maze {
 	public Maze(int width, int depth, boolean debug){
 		myWidth = width;
 		myDepth = depth;
-		myMaze = new String[myWidth * 2 + 1][myDepth * 2 + 1];
+		myMaze = new String[width * 2 + 1][depth * 2 + 1];
+		shortestPath = new Stack<int[]>();
 		createMaze();
 		init();
 		printMaze();
 		System.out.println();
 		buildMaze(sourceCoords[0], sourceCoords[1]);
-		replaceShortestPath();
-		//printMaze();
+		printShortestPath();
+		printMaze();
 	}
-	private void replaceShortestPath() {
-		
+	
+	private void printShortestPath() {
+		for( int[] coords: shortestPath) {
+			System.out.println("(" + coords[0] + "," + coords[1] + ")");
+			myMaze[coords[0]][coords[1]] = "+";
+		}
 	}
+
 	/**
 	 * 
 	 * @param r
 	 * @param c
 	 */
 	private void buildMaze(int r, int c) {
-		if(!canPass(r,c)) return;
+		if(!canPass(r,c)) {
+			if(!reachedDestination) {
+				shortestPath.pop();
+			}
+			return;
+		}
+		if(!reachedDestination) {
+			int[] coord = {r, c};
+			shortestPath.push(coord);
+		}
+		hasReachedDestination(r, c);
+		
 		int[] myCurrentCoords = {r,c};
 		System.out.println("current loc: " + "(" + myCurrentCoords[0] + "," + myCurrentCoords[1] + ")");
 		ArrayList<int[]> myCurrentList = getValidLocs(r, c);
@@ -65,16 +86,27 @@ public class Maze {
 						difference = myCurrentCoords[0] + 1;
 					}
 					myMaze[difference][myCurrentList.get(i)[1]] = " "; //else the current coords col == current list col
-				}
+				}	
+				/*hasReachedDestination(myCurrentList.get(i)[0], myCurrentList.get(i)[1]);
+					if(!reachedDestination) {
+						int[] coord = {myCurrentList.get(i)[0], myCurrentList.get(i)[1]};
+						shortestPath.push(coord);
+					}*/
 				System.out.println("location chose: " + "(" + myCurrentList.get(i)[0] + "," + myCurrentList.get(i)[1] + ")");
 				myMaze[myCurrentList.get(i)[0]][myCurrentList.get(i)[1]] = "V";
 				printMaze();
 				System.out.println();
 				buildMaze(myCurrentList.get(i)[0], myCurrentList.get(i)[1]);
-			}
+			} 
 		}
 	}
 
+	private void hasReachedDestination(int r, int c) {
+		if(r == destinationCoords[0] && c == destinationCoords[1]) {
+			reachedDestination = true;
+		}
+	}
+	
 	private boolean revalidate(int r, int c) {
 		boolean canPass = false;
 		// north
@@ -153,7 +185,7 @@ public class Maze {
 			validLocs.add(coordinates);
 		}
 		
-		randomizeLocs(validLocs);
+		Collections.shuffle(validLocs);
 		
 		for( int i= 0; i < validLocs.size(); i++) {
 			System.out.println("valid locs: " + "(" + validLocs.get(i)[0] + "," + validLocs.get(i)[1] + ")");
@@ -161,17 +193,15 @@ public class Maze {
 		return validLocs;
 	}
 
-	private void randomizeLocs(ArrayList<int[]> validLocs) {
-		// TODO Auto-generated method stub
-		
-	}
 	private void init() {
 		sourceCoords = new int[2];
 		destinationCoords = new int[2];
 		sourceCoords[0] = 1;
 		sourceCoords[1] = 1;
-		destinationCoords[0] = myMaze.length -1;
-		destinationCoords[1] = myMaze.length -2;
+		destinationCoords[0] = myDepth * 2 - 1;
+		destinationCoords[1] = myWidth * 2 - 1;
+		System.out.println(destinationCoords[0]);
+		System.out.println(destinationCoords[1]);
 		myMaze[0][1] = " ";
 		myMaze[1][1] = "V";
 		myMaze[myMaze.length -1][myMaze.length -2] = " ";
