@@ -16,7 +16,6 @@ public class Main {
 		/* tests random mazes */
 		for (int i = 0; i < 5; i++) {
 			testSize(rand.nextInt(15) + 1, rand.nextInt(15) + 1, rand.nextBoolean());
-			
 			System.out.println();
 		}
 		
@@ -29,7 +28,6 @@ public class Main {
 	public static void testSize(int depth, int width, boolean debug) {
 		System.out.println("Tests a " + depth + " x " + width + " maze with debug set to " + debug);
 		new Maze(depth, width, debug).display();
-		
 	}
 
 }
