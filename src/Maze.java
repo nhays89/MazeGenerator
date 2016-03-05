@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -25,37 +26,22 @@ public class Maze {
 	 * Creates a 2d maze of size n by m. With the debug flag set to true it will
 	 * show the steps of maze creation.
 	 * 
-	 * @param widththe width of the maze
+	 * @param width the width of the maze
 	 * @param depth the depth of the maze
-	 * @param debug
-	 *            the value of debug
+	 * @param debug the value of debug
 	 */
-	public Maze(int width, int depth, boolean debug) {
+	public Maze(int depth, int width, boolean debug) {
 		myWidth = width;
 		myDepth = depth;
-		//myMaze = new String[width * 2 + 1][depth * 2 + 1];
 		myMaze = new String[myDepth * 2 + 1][myWidth * 2 + 1];
 		shortestPathLocs = new Stack<int[]>();
 		visitedLocs = new Stack<int[]>();
 		createMaze();
 		init();
+		//printMaze();
 		buildMaze(sourceCoords[0], sourceCoords[1]);
-		//printShortestPath(shortestPathLocs, "shortest path locs");
-		//printShortestPath(visitedLocs, "visited locs");
 		replaceMazeChars();
 		printMaze();
-	}
-
-	private void printShortestPath(Stack<int[]> stack, String message) {
-		Stack<int[]> tempStack = new Stack<>();
-		while (!stack.isEmpty()) {
-			int[] coords = stack.peek();
-			System.out.print(message + "(" + coords[0] + "," + coords[1] + ") ");
-			tempStack.push(stack.pop());
-		}
-		while (!tempStack.isEmpty()) {
-			stack.push(tempStack.pop());
-		}
 	}
 
 	private void replaceMazeChars() {
@@ -96,15 +82,11 @@ public class Maze {
 		}
 		int[] myCurrentCoords = { r, c };
 		System.out.println();
-		//printShortestPath(shortestPathLocs, "shortest path locs");
 		if (!reachedDestination) {
 			int[] coord = { myCurrentCoords[0], myCurrentCoords[1] };
 			shortestPathLocs.push(coord);
 		}
 		ArrayList<int[]> myCurrentList = getValidLocs(r, c);
-		for(int i = 0; i < myCurrentList.size(); i++) {
-
-		}
 		printMaze();
 		System.out.println();
 		for (int i = 0; i < myCurrentList.size(); i++) {
@@ -126,7 +108,7 @@ public class Maze {
 					}
 					myMaze[difference][myCurrentList.get(i)[1]] = " ";
 				}
-				myMaze[myCurrentList.get(i)[0]][myCurrentList.get(i)[1]] = "V";		
+				myMaze[myCurrentList.get(i)[0]][myCurrentList.get(i)[1]] = "V";
 				buildMaze(myCurrentList.get(i)[0], myCurrentList.get(i)[1]);
 			}
 		}
@@ -212,7 +194,7 @@ public class Maze {
 			int[] coordinates = { row, col - 2 };
 			validLocs.add(coordinates);
 		}
-		
+
 		Collections.shuffle(validLocs);
 		return validLocs;
 	}
@@ -227,15 +209,13 @@ public class Maze {
 		myMaze[0][1] = " ";
 		myMaze[1][1] = "V";
 		System.out.println(myMaze.length);
-		/*myMaze[myMaze.length - 1][myMaze.length - 2] = " ";*/
-		myMaze[myDepth * 2][myWidth * 2 -1] = " ";
+		/* myMaze[myMaze.length - 1][myMaze.length - 2] = " "; */
+		myMaze[myDepth * 2][myWidth * 2 - 1] = " ";
 	}
 
 	private void createMaze() {
-		/*for (int i = 0; i < myMaze.length; i++) {*/
-			for( int i = 0; i < myDepth * 2 + 1; i++) {
-			/*for (int j = 0; j < myMaze[i].length; j++) {*/
-				for (int j = 0; j < myWidth * 2 + 1; j++) {
+		for (int i = 0; i < myDepth * 2 + 1; i++) {
+			for (int j = 0; j < myWidth * 2 + 1; j++) {
 				if (i % 2 == 0) {
 					myMaze[i][j] = "X";
 				} else {
