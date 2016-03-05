@@ -33,7 +33,8 @@ public class Maze {
 	public Maze(int width, int depth, boolean debug) {
 		myWidth = width;
 		myDepth = depth;
-		myMaze = new String[width * 2 + 1][depth * 2 + 1];
+		//myMaze = new String[width * 2 + 1][depth * 2 + 1];
+		myMaze = new String[myDepth * 2 + 1][myWidth * 2 + 1];
 		shortestPathLocs = new Stack<int[]>();
 		visitedLocs = new Stack<int[]>();
 		createMaze();
@@ -225,12 +226,16 @@ public class Maze {
 		destinationCoords[1] = myWidth * 2 - 1;
 		myMaze[0][1] = " ";
 		myMaze[1][1] = "V";
-		myMaze[myMaze.length - 1][myMaze.length - 2] = " ";
+		System.out.println(myMaze.length);
+		/*myMaze[myMaze.length - 1][myMaze.length - 2] = " ";*/
+		myMaze[myDepth * 2][myWidth * 2 -1] = " ";
 	}
 
 	private void createMaze() {
-		for (int i = 0; i < myMaze.length; i++) {
-			for (int j = 0; j < myMaze[i].length; j++) {
+		/*for (int i = 0; i < myMaze.length; i++) {*/
+			for( int i = 0; i < myDepth * 2 + 1; i++) {
+			/*for (int j = 0; j < myMaze[i].length; j++) {*/
+				for (int j = 0; j < myWidth * 2 + 1; j++) {
 				if (i % 2 == 0) {
 					myMaze[i][j] = "X";
 				} else {
