@@ -1,5 +1,7 @@
+/**
+ * 
+ */
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -23,9 +25,10 @@ public class Maze {
 	 * Creates a 2d maze of size n by m. With the debug flag set to true it will
 	 * show the steps of maze creation.
 	 * 
-	 * @param width the width of the maze
+	 * @param widththe width of the maze
 	 * @param depth the depth of the maze
-	 * @param debug the value of debug
+	 * @param debug
+	 *            the value of debug
 	 */
 	public Maze(int width, int depth, boolean debug) {
 		myWidth = width;
@@ -35,11 +38,23 @@ public class Maze {
 		visitedLocs = new Stack<int[]>();
 		createMaze();
 		init();
-		printMaze();
-		System.out.println();
 		buildMaze(sourceCoords[0], sourceCoords[1]);
+		//printShortestPath(shortestPathLocs, "shortest path locs");
+		//printShortestPath(visitedLocs, "visited locs");
 		replaceMazeChars();
 		printMaze();
+	}
+
+	private void printShortestPath(Stack<int[]> stack, String message) {
+		Stack<int[]> tempStack = new Stack<>();
+		while (!stack.isEmpty()) {
+			int[] coords = stack.peek();
+			System.out.print(message + "(" + coords[0] + "," + coords[1] + ") ");
+			tempStack.push(stack.pop());
+		}
+		while (!tempStack.isEmpty()) {
+			stack.push(tempStack.pop());
+		}
 	}
 
 	private void replaceMazeChars() {
@@ -47,7 +62,7 @@ public class Maze {
 		while (!visitedLocs.isEmpty()) {
 			boolean isFound = false;
 			int[] vLocs = visitedLocs.pop();
-			while(!shortestPathLocs.isEmpty()) {
+			while (!shortestPathLocs.isEmpty()) {
 				int[] sLocs = shortestPathLocs.pop();
 				if (vLocs[0] == sLocs[0] && vLocs[1] == sLocs[1]) {
 					myMaze[sLocs[0]][sLocs[1]] = "+";
@@ -72,26 +87,25 @@ public class Maze {
 	 * @param c
 	 */
 	private void buildMaze(int r, int c) {
+		hasReachedDestination(r, c);
 		int[] visitedCoords = { r, c };
 		visitedLocs.push(visitedCoords);
 		if (!canPass(r, c)) {
-			if (!reachedDestination) {
-				shortestPathLocs.pop();
-			}
 			return;
 		}
+		int[] myCurrentCoords = { r, c };
+		System.out.println();
+		//printShortestPath(shortestPathLocs, "shortest path locs");
 		if (!reachedDestination) {
-			int[] coord = { r, c };
+			int[] coord = { myCurrentCoords[0], myCurrentCoords[1] };
 			shortestPathLocs.push(coord);
 		}
-		
-		hasReachedDestination(r, c);
-
-		int[] myCurrentCoords = { r, c };
-		System.out.println("current loc: " + "(" + myCurrentCoords[0] + "," + myCurrentCoords[1] + ")");
 		ArrayList<int[]> myCurrentList = getValidLocs(r, c);
-		System.out.println("myCurrentList: " + "(" + myCurrentList.get(0)[0] + "," + myCurrentList.get(0)[1] + ")");
-		System.out.println("myCurrenList size : " + myCurrentList.size());
+		for(int i = 0; i < myCurrentList.size(); i++) {
+
+		}
+		printMaze();
+		System.out.println();
 		for (int i = 0; i < myCurrentList.size(); i++) {
 			if (revalidate(myCurrentCoords[0], myCurrentCoords[1])) {
 				int difference;
@@ -101,7 +115,6 @@ public class Maze {
 					} else {
 						difference = myCurrentCoords[1] + 1;
 					}
-					System.out.println(difference);
 					myMaze[myCurrentList.get(i)[0]][difference] = " ";
 
 				} else {
@@ -110,19 +123,21 @@ public class Maze {
 					} else {
 						difference = myCurrentCoords[0] + 1;
 					}
-					myMaze[difference][myCurrentList.get(i)[1]] = " "; 
+					myMaze[difference][myCurrentList.get(i)[1]] = " ";
 				}
-				System.out.println("location chose: " + "(" + myCurrentList.get(i)[0] + "," + myCurrentList.get(i)[1] + ")");
-				myMaze[myCurrentList.get(i)[0]][myCurrentList.get(i)[1]] = "V";
-				printMaze();
-				System.out.println();
+				myMaze[myCurrentList.get(i)[0]][myCurrentList.get(i)[1]] = "V";		
 				buildMaze(myCurrentList.get(i)[0], myCurrentList.get(i)[1]);
 			}
+		}
+		if (!reachedDestination) {
+			shortestPathLocs.pop();
 		}
 	}
 
 	private void hasReachedDestination(int r, int c) {
 		if (r == destinationCoords[0] && c == destinationCoords[1]) {
+			int[] coord = { r, c };
+			shortestPathLocs.push(coord);
 			reachedDestination = true;
 		}
 	}
@@ -145,7 +160,6 @@ public class Maze {
 		if (c - 2 > 0 && myMaze[r][c - 2] == " ") {
 			canPass = true;
 		}
-		System.out.println("revalidate: " + canPass);
 		return canPass;
 	}
 
@@ -167,7 +181,6 @@ public class Maze {
 		if (c - 2 > 0 && myMaze[r][c - 2] == " ") {
 			canPass = true;
 		}
-		System.out.println("can pass: " + canPass);
 		return canPass;
 	}
 
@@ -198,12 +211,8 @@ public class Maze {
 			int[] coordinates = { row, col - 2 };
 			validLocs.add(coordinates);
 		}
-
+		
 		Collections.shuffle(validLocs);
-
-		for (int i = 0; i < validLocs.size(); i++) {
-			System.out.println("valid locs: " + "(" + validLocs.get(i)[0] + "," + validLocs.get(i)[1] + ")");
-		}
 		return validLocs;
 	}
 
@@ -214,8 +223,6 @@ public class Maze {
 		sourceCoords[1] = 1;
 		destinationCoords[0] = myDepth * 2 - 1;
 		destinationCoords[1] = myWidth * 2 - 1;
-		System.out.println(destinationCoords[0]);
-		System.out.println(destinationCoords[1]);
 		myMaze[0][1] = " ";
 		myMaze[1][1] = "V";
 		myMaze[myMaze.length - 1][myMaze.length - 2] = " ";
@@ -245,4 +252,5 @@ public class Maze {
 			}
 		}
 	}
+
 }
