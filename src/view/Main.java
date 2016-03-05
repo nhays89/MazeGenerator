@@ -1,4 +1,8 @@
+package view;
+
 import java.util.Random;
+
+import model.Maze;
 
 /**
  * Main controller for testing mazes. 
