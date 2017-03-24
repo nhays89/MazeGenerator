@@ -36,3 +36,9 @@ been visited, causing the algorithm to backtrack all the way back to the beginni
          </ol>
     </ol>
 </ol>
+
+
+***Maze***
+
+![maze](https://github.com/nhays89/MazeGenerator/blob/master/maze.png)
+
