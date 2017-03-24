@@ -1,6 +1,7 @@
 # MazeGenerator
 
-#### Builds mazes using spanning trees in a 2 dimensional grid of coordinates
+This program builds mazes using spanning trees in a 2 dimensional grid of coordinates.
+
 <strong> Depth-First Search</strong>
 <p>This algorithm is a randomized version of the depth-first search algorithm. 
 Frequently implemented with a stack, this approach is one of the simplest ways 
