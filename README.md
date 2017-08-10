@@ -40,5 +40,5 @@ been visited, causing the algorithm to backtrack all the way back to the beginni
 
 ***Maze***
 
-![maze](https://github.com/nhays89/MazeGenerator/blob/master/maze.png)
+![maze](https://github.com/nhays89/MazeGenerator/blob/master/maze.gif)
 
